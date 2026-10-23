@@ -1,0 +1,200 @@
+# code-. 23 in 69w 
+ git remote -v:
+ # code 124 in 891 
+ -- Save this script inside "ServerScriptService" in Roblox Studio
+-- Name the script: GameManager
+
+local Players = game:GetService("Players")
+local DataStoreService = game:GetService("DataStoreService")
+local TweenService = game:GetService("TweenService")
+
+-- Create a secure database to save player coins
+local coinDataStore = DataStoreService:GetDataStore("PlayerCoins_v1")
+
+---------------------------------------------------------
+-- 1. LEADERBOARD & DATA SAVING SYSTEM
+---------------------------------------------------------
+
+-- Triggers when a new player joins the game
+local function onPlayerAdded(player)
+	-- Create the top-right leaderboard
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+
+	-- Add "Coins" stat to the leaderboard
+	local coins = Instance.new("IntValue")
+	coins.Name = "Coins"
+	coins.Value = 0 -- Default value
+	coins.Parent = leaderstats
+
+	-- Load saved data from GitHub/Roblox secure cloud
+	local playerKey = "Player_" .. player.UserId
+	local success, savedCoins = pcall(function()
+		return coinDataStore:GetAsync(playerKey)
+	end)
+
+	if success and savedCoins then
+		coins.Value = savedCoins
+		print("Successfully loaded " .. savedCoins .. " coins for " .. player.Name)
+	else
+		print("No saved data found for " .. player.Name .. ". Starting fresh!")
+	end
+end
+
+-- Triggers when a player leaves the game
+local function onPlayerRemoving(player)
+	local playerKey = "Player_" .. player.UserId
+	local coinsValue = player.leaderstats.Coins.Value
+
+	-- Save data to the cloud
+	local success, err = pcall(function()
+		coinDataStore:SetAsync(playerKey, coinsValue)
+	end)
+
+	if success then
+		print("Successfully saved data for " .. player.Name)
+	else
+		warn("Failed to save data for " .. player.Name .. ": " .. tostring(err))
+	end
+end
+
+-- Connect functions to player events
+Players.PlayerAdded:Connect(onPlayerAdded)
+Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+
+---------------------------------------------------------
+-- 2. CUSTOM SPINNING COIN SYSTEM
+---------------------------------------------------------
+
+-- Function to dynamically generate a custom spinning coin
+local function spawnCustomCoin(position)
+	-- Create the physical coin part
+	local coin = Instance.new("Part")
+	coin.Size = Vector3.new(3, 3, 0.5)
+	coin.Shape = Enum.PartType.Cylinder
+	coin.Color = Color3.fromRGB(255, 215, 0) -- Gold color
+	coin.Material = Enum.Material.Neon
+	coin.Position = position + Vector3.new(0, 2, 0) -- Lift slightly off ground
+	coin.Anchored = true
+	coin.CanCollide = false
+	coin.Parent = workspace
+
+	-- Create an infinite spinning animation loop
+	task.spawn(function()
+		while coin and coin.Parent do
+			coin.Orientation = coin.Orientation + Vector3.new(0, 4, 0)
+			task.wait(0.02)
+		end
+	end)
+
+	-- Debounce variable to prevent double-touch glitching
+	local beingCollected = false
+
+	-- Trigger collection when a player touches the coin
+	coin.Touched:Connect(function(otherPart)
+		if beingCollected then return end
+
+		local character = otherPart.Parent
+		local player = Players:GetPlayerFromCharacter(character)
+
+		if player then
+			beingCollected = true
+			
+			-- Award the custom amount of coins
+			player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 10
+			
+			-- Play a nice collection animation (fades out and shrinks)
+			local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+			local goal = {
+				Size = Vector3.new(0,0,0),
+				Transparency = 1
+			}
+			local tween = TweenService:Create(coin, tweenInfo, goal)
+			tween:Play()
+			
+			-- Completely delete the coin part from memory once animation finishes
+			tween.Completed:Connect(function()
+				coin:Destroy()
+			end)
+		end
+	end)
+end
+
+-- Automatically spawn 5 sample coins across your map center when the game starts
+task.wait(2) -- Wait for world to load
+print("✨ Custom Coin System activated!")
+spawnCustomCoin(Vector3.new(0, 0, 0))
+spawnCustomCoin(Vector3.new(10, 0, 10))
+spawnCustomCoin(Vector3.new(-10, 0, -10))
+spawnCustomCoin(Vector3.new(20, 0, -5))
+spawnCustomCoin(Vector3.new(-15, 0, 15))
+
+-- Example: kill a mob when the coin is touched
+local function killMobFromTouch(otherPart)
+	local model = otherPart.Parent
+	if not model then return end
+
+	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+
+-- Usage inside the coin's Touched connection:
+-- killMobFromTouch(otherPart) 
+# usage inside the coin and untouched  and coin  is the  is aura farm the work to kill x100 mob  port the output and problems is undo 
+# usage is undo kill the -100
+# 10+1=11 
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Style Custom Code Block</title>
+    <style>
+f0f6fc  
+tittle is 20
+### 🧮 Custom Math Challenge: Multi-Step Calculation
+
+Test your order of operations with this practical system application problem.
+
+**Question:**
+A cloud storage network consists of $n$ identical server racks. Each server rack contains $s$ solid-state storage drives. The network operations team splits the grand total of all available drives into $g$ equal maintenance groups. 
+
+Which mathematical expression represents the exact number of storage drives allocated to a single maintenance group?
+
+- **A)** $\frac{g}{n \cdot s}$
+- **B)** $\frac{n}{s \cdot g}$
+- **C)** $\frac{n \cdot s}{g}$
+- **D)** $n \cdot s \cdot g$
+
+---
+
+<details>
+<summary><b>💡 Click to Reveal Hint</b></summary>
+
+1. **Multiplication Step:** First, calculate the total pool of available drives across the network by multiplying the number of server racks ($n$) by the drives per rack ($s$).
+2. **Division Step:** Take that grand total of drives and split (divide) it equally into the given number of maintenance groups ($g$).
+</details>
+
+<details>
+<summary><b>✅ Click to Reveal Solution & Explanation</b></summary>
+
+**Correct Answer: C**
+
+**Step-by-Step Breakdown:**
+1. **Find total network drives:**  
+   $$\text{Total Drives} = n \cdot s$$
+2. **Distribute across groups:**  
+   To find the allocation per single group, divide the total drive count by the number of target groups:
+   $$\text{Drives per Group} = \frac{n \cdot s}{g}$$
+</details> 
+ /frac  text 20000
+ <!-- cdot -->
+  cdot is textx2000 
+cdots is text 22000
+
+260 is 110 
+2560 is 204
+esc is 204 
+1494 to 391 reval 2102
+

@@ -1,0 +1,44 @@
+name: Pre-commit hack x2
+
+on:
+  pull_request:
+    branches: [main, staging]
+  push:
+    branches: [main, staging]
+
+jobs:
+  precommit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Validate JSON files
+        run: |
+          find. -type f -name "*.json" -print0 |
+          while IFS= read -r -d '' file; do
+          python -m json.tool "$file" > /dev/null
+          done
+
+      - name: Run hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+        import Mathlib
+
+namespace MathCodeLean
+
+def bundledWorkspaceReady : Prop := True
+
+end MathCodeLean
+name run hooks
+name run hooks 
+name run hooks 
+math code lean 
+code lean 
+--impoet comit run 2234q43232321
